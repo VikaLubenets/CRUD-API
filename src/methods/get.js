@@ -1,22 +1,18 @@
-import { validate as uuidValidate } from 'uuid';
+import { validate } from 'uuid';
 
 export default function Get(req, res) {
-    // Извлекаем путь без параметров из запроса
     const pathname = req.query.pathname;
 
     switch (pathname) {
         case "/users":
-            // Проверяем, есть ли параметр id в запросе
             const userId = req.query.searchParams.get("id");
             if (userId) {
-                // Проверка валидности UUID
-                if (!uuidValidate(userId)) {
+                if (!validate(userId)) {
                     res.writeHead(400, { 'Content-Type': 'text/plain' });
                     res.end('userId is invalid');
                     return;
                 }
 
-                // Ищем пользователя по id
                 const user = req.users.find((user) => user.id === userId);
 
                 if (user) {
@@ -27,7 +23,6 @@ export default function Get(req, res) {
                     res.end("record with id === userId doesn't exist");
                 }
             } else {
-                // Если id не указан, возвращаем всех пользователей
                 res.writeHead(200, { 'Content-Type': 'application/json' });
                 res.end(JSON.stringify(req.users));
             }
