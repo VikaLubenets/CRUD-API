@@ -1,4 +1,6 @@
-[
+import { v4 as uuidv4 } from 'uuid';
+
+const users = [
     {
         "id": "1",
         "username": "Frank",
@@ -59,4 +61,11 @@
         "age": 37,
         "hobbies": ["coding", "photography"]
     }
-]
+];
+
+const usersUUID = users.map(user => ({
+    ...user,
+    id: uuidv4()
+}));
+
+export default usersUUID;
