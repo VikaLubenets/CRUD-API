@@ -6,8 +6,11 @@ import Delete from './methods/delete';
 import usersUUID from './data/data';
 import ParseBody from './services/parseBody';
 import handleError from './services/handleError';
+import * as dotenv from 'dotenv';
 
-const port = process.env.PORT ?? 3000;
+dotenv.config();
+
+const port = process.env.PORT;
 
 const server = http.createServer((req, res) => {
     try {
