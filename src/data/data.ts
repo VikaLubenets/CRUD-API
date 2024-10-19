@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
+import { v4 } from 'uuid';
 
 const users = [
     {
@@ -65,7 +65,7 @@ const users = [
 
 const usersUUID = users.map(user => ({
     ...user,
-    id: uuidv4()
+    id: v4()
 }));
 
 export default usersUUID;

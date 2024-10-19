@@ -1,8 +1,10 @@
-import UpdateUser from '../services/updateUser.js';
-import ValidateFields from '../services/validateFields.js';
+import { IncomingMessage, ServerResponse } from 'node:http';
+import UpdateUser from '../services/updateUser';
+import ValidateFields from '../services/validateFields';
 import { validate } from 'uuid';
+import { User } from '../types';
 
-export default function Put(req, res) {
+export default function Put(req: IncomingMessage, res: ServerResponse) {
     const pathname = req.query.pathname;
     const pathParts = pathname.split('/');
 
@@ -18,7 +20,7 @@ export default function Put(req, res) {
         const userIndex = req.users.findIndex((user) => user.id === userId);
 
         if (userIndex !== -1) {
-            const user = req.body;
+            const user = req.body as Partial<User>;
             if(ValidateFields(user)){
                 const updatedUser = UpdateUser(req, userIndex);
                 res.writeHead(200, { 'Content-Type': 'application/json' });

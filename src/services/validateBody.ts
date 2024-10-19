@@ -1,6 +1,7 @@
-import ValidateFields from './validateFields.js'
+import { User } from '../types';
+import ValidateFields from './validateFields'
 
-export default function validateBody(obj){
+export default function validateBody(obj: Partial<User>){
     const template = {
         username: '',
         age: 0,

@@ -1,6 +1,7 @@
+import { ServerResponse, IncomingMessage } from 'node:http';
 import { validate } from 'uuid';
 
-export default function Get(req, res) {
+export default function Get(req: IncomingMessage, res: ServerResponse) {
     const pathname = req.query.pathname;
     const pathParts = pathname.split('/');
 

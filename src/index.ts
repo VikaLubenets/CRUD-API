@@ -1,18 +1,18 @@
 import * as http from 'node:http'
-import Get from './methods/get.js';
-import POST from './methods/post.js';
-import Put from './methods/put.js';
-import Delete from './methods/delete.js';
-import usersUUID from './data/data.js';
-import ParseBody from './services/parseBody.js';
-import handleError from './services/handleError.js';
+import Get from './methods/get';
+import POST from './methods/post';
+import Put from './methods/put';
+import Delete from './methods/delete';
+import usersUUID from './data/data';
+import ParseBody from './services/parseBody';
+import handleError from './services/handleError';
 
 const port = process.env.PORT ?? 3000;
 
 const server = http.createServer((req, res) => {
     try {
         req.users = usersUUID;
-        req.query = new URL(req.url, `http://${req.headers.host}`);
+        req.query = new URL(req.url ?? '', `http://${req.headers.host}`);
     
         switch (req.method) {
             case "GET":
@@ -35,8 +35,8 @@ const server = http.createServer((req, res) => {
                 res.writeHead(500, { 'Content-Type': 'text/plain' });
                 res.end('Intenal server error');
         }
-    } catch(e){
-        handleError(e, res)
+    } catch(err){
+        handleError(err as Error, res)
     }
 });
 

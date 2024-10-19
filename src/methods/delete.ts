@@ -1,7 +1,8 @@
 import { validate as isUUID } from 'uuid';
-import DeleteUser from '../services/deleteUser.js';
+import DeleteUser from '../services/deleteUser';
+import { IncomingMessage, ServerResponse } from 'node:http';
 
-export default function Delete(req, res) {
+export default function Delete(req: IncomingMessage, res: ServerResponse) {
     const pathname = req.query.pathname;
     const pathParts = pathname.split('/');
 

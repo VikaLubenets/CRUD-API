@@ -1,4 +1,6 @@
-export default function ValidateFields(obj){
+import { User } from "../types";
+
+export default function ValidateFields(obj: Partial<User>){
     const template = {
         username: '',
         age: 0,
@@ -17,8 +19,8 @@ export default function ValidateFields(obj){
         }
 
         if (key === 'age') {
-            const age = parseInt(obj[key]);
-            if (Number.isNaN(age) || !Number.isInteger(age) || age < 0) {
+            const age = parseInt(String(obj[key] ?? ''));
+            if (!age || typeof age !== 'number' || !Number.isInteger(age) || age < 0) {
                 return false;
             }
         }

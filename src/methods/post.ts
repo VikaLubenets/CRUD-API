@@ -1,12 +1,14 @@
-import AddUser from '../services/addUser.js';
-import validateBody from '../services/validateBody.js';
+import { IncomingMessage, ServerResponse } from 'node:http';
+import AddUser from '../services/addUser';
+import validateBody from '../services/validateBody';
+import { User } from '../types.js';
 
-export default function POST(req, res) {
+export default function POST(req: IncomingMessage, res: ServerResponse) {
     const pathname = req.query.pathname;
     const pathParts = pathname.split('/');
 
     if (pathParts[2] === "users") {
-        const newUser = req.body;
+        const newUser = req.body as User;
         if (validateBody(newUser)) {
             const user = AddUser(req, newUser);
             res.writeHead(201, { 'Content-Type': 'application/json' });
