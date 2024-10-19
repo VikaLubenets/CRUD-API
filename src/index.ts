@@ -1,11 +1,11 @@
 import * as http from 'node:http'
-import Get from './src/methods/get.js';
-import POST from './src/methods/post.js';
-import Put from './src/methods/put.js';
-import Delete from './src/methods/delete.js';
-import usersUUID from './src/data/data.js';
-import ParseBody from './src/services/parseBody.js';
-import handleError from './src/services/handleError.js';
+import Get from './methods/get.js';
+import POST from './methods/post.js';
+import Put from './methods/put.js';
+import Delete from './methods/delete.js';
+import usersUUID from './data/data.js';
+import ParseBody from './services/parseBody.js';
+import handleError from './services/handleError.js';
 
 const port = process.env.PORT ?? 3000;
 
