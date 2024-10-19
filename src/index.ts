@@ -14,24 +14,23 @@ const port = process.env.PORT;
 
 const server = http.createServer((req, res) => {
     try {
-        req.users = usersUUID;
-        req.query = new URL(req.url ?? '', `http://${req.headers.host}`);
+        const query = new URL(req.url ?? '', `http://${req.headers.host}`);
     
         switch (req.method) {
             case "GET":
-                Get(req, res);
+                Get(req, res, query);
                 break;
             
             case "POST":
-                ParseBody(req, res, POST);
+                ParseBody(req, res, POST, query);
                 break;
             
             case "PUT":
-                ParseBody(req, res, Put);
+                ParseBody(req, res, Put, query);
                 break;
             
             case "DELETE":
-                Delete(req, res);
+                Delete(req, res, query);
                 break;
             
             default:

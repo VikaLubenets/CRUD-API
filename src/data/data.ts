@@ -1,4 +1,5 @@
 import { v4 } from 'uuid';
+import { User } from '../types';
 
 const users = [
     {
@@ -66,6 +67,6 @@ const users = [
 const usersUUID = users.map(user => ({
     ...user,
     id: v4()
-}));
+})) as User[];
 
 export default usersUUID;

@@ -1,8 +1,9 @@
 import { ServerResponse, IncomingMessage } from 'node:http';
 import { validate } from 'uuid';
+import usersUUID from '../data/data';
 
-export default function Get(req: IncomingMessage, res: ServerResponse) {
-    const pathname = req.query.pathname;
+export default function Get(req: IncomingMessage, res: ServerResponse, query: URL) {
+    const pathname = query.pathname;
     const pathParts = pathname.split('/');
 
     if (pathParts[2] === "users") {
@@ -15,7 +16,7 @@ export default function Get(req: IncomingMessage, res: ServerResponse) {
                 return;
             }
 
-            const user = req.users.find((user) => user.id === userId);
+            const user = usersUUID.find((user) => user.id === userId);
 
             if (user) {
                 res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -26,7 +27,7 @@ export default function Get(req: IncomingMessage, res: ServerResponse) {
             }
         } else {
             res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify(req.users));
+            res.end(JSON.stringify(usersUUID));
         }
     } else {
         res.writeHead(404, { 'Content-Type': 'text/plain' });

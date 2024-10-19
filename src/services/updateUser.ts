@@ -1,21 +1,25 @@
 import { IncomingMessage } from "node:http";
 import { User } from "../types";
+import usersUUID from '../data/data';
 
-export default function UpdateUser(req: IncomingMessage, userIndex: number) {
-    const updatedUserData = req.body as Partial<User>;
+export default function UpdateUser(req: IncomingMessage, userIndex: number, body: Partial<User>) {
+    const updatedUserData = body;
 
-    if (updatedUserData.age) {
-        const parsedAge = Number(updatedUserData.age);
-
-        if (!isNaN(parsedAge)) {
-            updatedUserData.age = parsedAge;
+    if (updatedUserData.age !== undefined) {
+        if (typeof updatedUserData.age === 'string') {
+            const parsedAge = Number(updatedUserData.age);
+            if (!isNaN(parsedAge)) {
+                updatedUserData.age = parsedAge;
+            }
         }
     }
 
-    req.users[userIndex] = {
-        ...req.users[userIndex],
+    usersUUID[userIndex] = {
+        ...usersUUID[userIndex],
         ...updatedUserData,
-    };
+    } as User;
 
-    return req.users[userIndex];
+    return usersUUID[userIndex];
 }
+
+

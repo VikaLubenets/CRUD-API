@@ -3,9 +3,10 @@ import UpdateUser from '../services/updateUser';
 import ValidateFields from '../services/validateFields';
 import { validate } from 'uuid';
 import { User } from '../types';
+import usersUUID from '../data/data';
 
-export default function Put(req: IncomingMessage, res: ServerResponse) {
-    const pathname = req.query.pathname;
+export default function Put(req: IncomingMessage, res: ServerResponse, query: URL, body: Partial<User>) {
+    const pathname = query.pathname;
     const pathParts = pathname.split('/');
 
     if (pathParts[2] === "users") {
@@ -17,12 +18,12 @@ export default function Put(req: IncomingMessage, res: ServerResponse) {
             return;
         }
 
-        const userIndex = req.users.findIndex((user) => user.id === userId);
+        const userIndex = usersUUID.findIndex((user) => user.id === userId);
 
         if (userIndex !== -1) {
-            const user = req.body as Partial<User>;
+            const user = body as Partial<User>;
             if(ValidateFields(user)){
-                const updatedUser = UpdateUser(req, userIndex);
+                const updatedUser = UpdateUser(req, userIndex, body);
                 res.writeHead(200, { 'Content-Type': 'application/json' });
                 res.write(JSON.stringify(updatedUser));
                 res.end();

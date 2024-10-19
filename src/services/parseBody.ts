@@ -1,9 +1,11 @@
 import { IncomingMessage, ServerResponse } from "node:http";
+import { User } from "../types";
 
-export default function ParseBody(
+export default function ParseBody<T>(
     req: IncomingMessage, 
     res: ServerResponse,
-    fn: (req: IncomingMessage, res: ServerResponse) => void
+    fn: (req: IncomingMessage, res: ServerResponse, query: URL, body: T) => void,
+    query: URL
 ) {
     let bodyData: Buffer[] = [];
 
@@ -12,10 +14,20 @@ export default function ParseBody(
     });
 
     req.on("end", () => {
-        req.body = Buffer.concat(bodyData).toString();
+        let body = Buffer.concat(bodyData).toString();
+        let parsedBody: Partial<User> = {};
+
         if (req.headers["content-type"] === "application/json") {
-            req.body = JSON.parse(req.body);
+            try {
+                parsedBody = JSON.parse(body);
+            } catch (error) {
+                console.error("Error parsing JSON:", error);
+                res.writeHead(400, { 'Content-Type': 'text/plain' });
+                res.end('Invalid JSON');
+                return;
+            }
         }
-        fn(req, res);
+
+        fn(req, res, query, parsedBody as T);
     });
 }

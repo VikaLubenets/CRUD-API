@@ -3,14 +3,14 @@ import AddUser from '../services/addUser';
 import validateBody from '../services/validateBody';
 import { User } from '../types.js';
 
-export default function POST(req: IncomingMessage, res: ServerResponse) {
-    const pathname = req.query.pathname;
+export default function POST(req: IncomingMessage, res: ServerResponse, query: URL, body: string) {
+    const pathname = query.pathname;
     const pathParts = pathname.split('/');
 
     if (pathParts[2] === "users") {
-        const newUser = req.body as User;
+        const newUser = body as unknown as User;
         if (validateBody(newUser)) {
-            const user = AddUser(req, newUser);
+            const user = AddUser(newUser);
             res.writeHead(201, { 'Content-Type': 'application/json' });
             res.write(JSON.stringify(user));
             res.end();

@@ -1,9 +1,10 @@
 import { validate as isUUID } from 'uuid';
 import DeleteUser from '../services/deleteUser';
 import { IncomingMessage, ServerResponse } from 'node:http';
+import usersUUID from '../data/data';
 
-export default function Delete(req: IncomingMessage, res: ServerResponse) {
-    const pathname = req.query.pathname;
+export default function Delete(req: IncomingMessage, res: ServerResponse, query: URL) {
+    const pathname = query.pathname;
     const pathParts = pathname.split('/');
 
     if (pathParts[2] === "users") {
@@ -16,10 +17,10 @@ export default function Delete(req: IncomingMessage, res: ServerResponse) {
                 return;
             }
 
-            const userIndex = req.users.findIndex((user) => user.id === userId);
+            const userIndex = usersUUID.findIndex((user) => user.id === userId);
 
             if (userIndex !== -1) {
-                DeleteUser(req, userIndex);
+                DeleteUser(userIndex);
                 res.writeHead(204);
                 res.end();
             } else {
