@@ -5,8 +5,8 @@ export default function Delete(req, res) {
     const pathname = req.query.pathname;
     const pathParts = pathname.split('/');
 
-    if (pathParts[1] === "users") {
-        const userId = pathParts[2];
+    if (pathParts[2] === "users") {
+        const userId = pathParts[3];
 
         if (userId) {
             if (!isUUID(userId)) {
@@ -30,7 +30,7 @@ export default function Delete(req, res) {
             res.end("userId is not provided in the path");
         }
     } else {
-        res.writeHead(400, { 'Content-Type': 'text/plain' });
-        res.end('Route is not found');
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        res.end('Route not found');
     }
 }

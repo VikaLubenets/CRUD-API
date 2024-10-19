@@ -4,8 +4,8 @@ export default function Get(req, res) {
     const pathname = req.query.pathname;
     const pathParts = pathname.split('/');
 
-    if (pathParts[1] === "users") {
-        const userId = pathParts[2];
+    if (pathParts[2] === "users") {
+        const userId = pathParts[3];
 
         if (userId) {
             if (!validate(userId)) {
@@ -28,7 +28,7 @@ export default function Get(req, res) {
             res.end(JSON.stringify(req.users));
         }
     } else {
-        res.writeHead(400, { 'Content-Type': 'text/plain' });
-        res.end('Route is not found');
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        res.end('Route not found');
     }
 }

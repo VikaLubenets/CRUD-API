@@ -1,3 +1,5 @@
+import ValidateFields from './validateFields.js'
+
 export default function validateBody(obj){
     const template = {
         username: '',
@@ -12,23 +14,5 @@ export default function validateBody(obj){
         return false
     }
 
-    for(let key of objKeys){
-        if(!tempKeys.includes(key)){
-            return false
-        }
-
-        if(key === 'username' && typeof obj[key] !== 'string'){
-            return false
-        }
-
-        if(key === 'age' && typeof parseInt(obj[key]) !== 'number'){
-            return false
-        }
-
-        if(key === 'hobbies' && !Array.isArray(obj[key])){
-            return false
-        }
-    }
-
-    return true
+    return ValidateFields(obj);
 }
