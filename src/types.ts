@@ -1,6 +1,6 @@
 export interface User {
-    id: string;
-    username: string;
-    age: string | number;
-    hobbies: string[];
+  id: string;
+  username: string;
+  age: string | number;
+  hobbies: string[];
 }
