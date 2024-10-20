@@ -27,7 +27,7 @@ export default function Get(
         res.end(JSON.stringify(user));
       } else {
         res.writeHead(404, { "Content-Type": "text/plain" });
-        res.end("record with id === userId doesn't exist" );
+        res.end("record with id === userId doesn't exist");
       }
     } else {
       res.writeHead(200, { "Content-Type": "application/json" });
