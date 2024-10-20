@@ -26,7 +26,7 @@ export default function Delete(
       if (userIndex !== -1) {
         DeleteUser(userIndex);
         res.writeHead(204);
-        res.end('User deleted successfully');
+        res.end('User is deleted');
       } else {
         res.writeHead(404, { "Content-Type": "text/plain" });
         res.end("record with id === userId doesn't exist");
