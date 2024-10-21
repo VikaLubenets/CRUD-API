@@ -73,7 +73,6 @@ describe("User API scenario 1: described in assignment as an example", () => {
   });
 });
 
-
 describe("User API scenario 2: tests for getting error 400 in the cases described in the assigmnment", () => {
   let wrongNewUser = {
     username: "Penelopa",
@@ -123,9 +122,7 @@ describe("User API scenario 2: tests for getting error 400 in the cases describe
     expect(response.status).toBe(400);
     expect(response.text).toBe("userId is invalid");
   });
-
 });
-
 
 describe("User API scenario 3: tests for getting error 404 in the cases described in the assigmnment", () => {
   let randomUserId = v4();
@@ -162,5 +159,4 @@ describe("User API scenario 3: tests for getting error 404 in the cases describe
     expect(response.status).toBe(404);
     expect(response.text).toBe("record with id === userId doesn't exist");
   });
-
 });
