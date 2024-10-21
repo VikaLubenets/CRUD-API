@@ -7,18 +7,13 @@ jest.mock("../data/data.ts", () => ({
   default: [],
 }));
 
-describe("User API", () => {
+describe("User API scenario 1: described in assignment as an example", () => {
   let userId: string;
   let newUser = {
     username: "Mike",
     age: 50,
     hobbies: [],
   };
-  let wrongNewUser = {
-    username: "Penelopa",
-    age: "50",
-  };
-  let randomUserId = v4();
 
   beforeAll((): void => {
     server.close();
@@ -76,6 +71,25 @@ describe("User API", () => {
     expect(response.status).toBe(404);
     expect(response.text).toBe("record with id === userId doesn't exist");
   });
+});
+
+
+describe("User API scenario 2: tests for getting error 400 in the cases described in the assigmnment", () => {
+  let wrongNewUser = {
+    username: "Penelopa",
+    age: "50",
+  };
+
+  beforeAll((): void => {
+    server.close();
+    server.listen(process.env.PORT || 3000);
+  });
+
+  afterAll(async (): Promise<void> => {
+    await new Promise((resolve): void => {
+      server.close(resolve);
+    });
+  });
 
   test("POST: server should answer with status code 400 and corresponding message if request body does not contain required fields", async () => {
     const response = await request(server)
@@ -110,6 +124,23 @@ describe("User API", () => {
     expect(response.text).toBe("userId is invalid");
   });
 
+});
+
+
+describe("User API scenario 3: tests for getting error 404 in the cases described in the assigmnment", () => {
+  let randomUserId = v4();
+
+  beforeAll((): void => {
+    server.close();
+    server.listen(process.env.PORT || 3000);
+  });
+
+  afterAll(async (): Promise<void> => {
+    await new Promise((resolve): void => {
+      server.close(resolve);
+    });
+  });
+
   test("GET USER BY ID: Server should answer with status code 404 and corresponding message if record with id === userId doesn't exist", async () => {
     const response = await request(server).get(`/api/users/${randomUserId}`);
     expect(response.status).toBe(404);
@@ -131,4 +162,5 @@ describe("User API", () => {
     expect(response.status).toBe(404);
     expect(response.text).toBe("record with id === userId doesn't exist");
   });
+
 });

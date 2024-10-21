@@ -17,12 +17,12 @@ if (cluster.isPrimary) {
   }
 
   cluster.on('exit', (worker) => {
-    console.log(`Worker ${worker.process.pid} died. Starting a new one...`);
+    console.log(`Worker ${worker.process.pid} is died. We are going to  start a new one`);
     cluster.fork();
   });
 
   let currentIndex = 0;
-  const workers = Object.values(cluster.workers ?? {});
+  const workers = cluster.workers ? Object.values(cluster.workers) : [];
 
   const loadBalancer = http.createServer((req, res) => {
     const worker = workers[currentIndex];
@@ -43,9 +43,10 @@ if (cluster.isPrimary) {
             }
           });
         
-          console.log(`Request received on load balancer, forwarding to worker id ${worker.id}`);
+          console.log(`Request ${url} received on load balancer, forwarding to worker id ${worker.id}`);
           
           worker.once('message', (message) => {
+            console.log(`Worker ${worker.id} responded with message:`, message);
             const { statusCode, headers, responseBody } = message;
             res.writeHead(statusCode, headers);
             res.end(responseBody);
@@ -68,7 +69,9 @@ if (cluster.isPrimary) {
         });
         
         workerServer.listen(workerPort, () => {
-          console.log(`Worker ${workerId} started on port ${workerPort}`);
+          console.log(`Worker with id ${workerId} and pid ${process.pid} started on port ${workerPort}`);
         });
     }
 }
+
+
