@@ -16,19 +16,42 @@ if (cluster.isPrimary) {
     cluster.fork();
   }
 
+  cluster.on('exit', (worker) => {
+    console.log(`Worker ${worker.process.pid} died. Starting a new one...`);
+    cluster.fork();
+  });
+
   let currentIndex = 0;
   const workers = Object.values(cluster.workers ?? {});
 
   const loadBalancer = http.createServer((req, res) => {
-    const worker = workers[currentIndex % workers.length];
-    worker?.send({ req, res }, (err) => {
-      if (err) {
-        console.error('Error handling request:', err);
-        res.writeHead(500, { 'Content-Type': 'text/plain' });
-        res.end('Internal Server Error');
+    const worker = workers[currentIndex];
+    if (worker) {
+        const { method, headers, url } = req;
+        let body: any = '';
+  
+        req.on('data', (chunk) => {
+          body += chunk;
+        });
+  
+        req.on('end', () => {
+          worker.send({ method, headers, url, body }, (err) => {
+            if (err) {
+              console.error('Error sending request to worker:', err);
+              res.writeHead(500);
+              res.end('Internal Server Error');
+            }
+          });
+        
+          console.log(`Request received on load balancer, forwarding to worker id ${worker.id}`);
+          
+          worker.once('message', (message) => {
+            const { statusCode, headers, responseBody } = message;
+            res.writeHead(statusCode, headers);
+            res.end(responseBody);
+          });
+        });
       }
-    });
-    console.log(`Request received on load balancer, forwarding to worker ${worker?.id}`);
     currentIndex = (currentIndex + 1) % workers.length;
   });
 
@@ -45,7 +68,7 @@ if (cluster.isPrimary) {
         });
         
         workerServer.listen(workerPort, () => {
-          console.log(`Worker ${process.pid} started on port ${workerPort}`);
+          console.log(`Worker ${workerId} started on port ${workerPort}`);
         });
     }
 }
